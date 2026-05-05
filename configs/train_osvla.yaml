@@ -1,0 +1,25 @@
+# Operational-space VLA. Outputs (pose 6, wrench 6, impedance 12).
+output_space: operational
+backbone_name: google/paligemma-3b-pt-224
+dataset_dir: data/processed
+output_dir: runs/osvla
+batch_size: 16
+grad_accum: 1
+lr: 1.0e-4
+weight_decay: 0.0
+num_epochs: 3
+log_every: 25
+save_every: 500
+loss_weights:
+  # Start equal; tune once we see component magnitudes.
+  pose: 1.0
+  wrench: 1.0
+  impedance: 1.0
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+joint_dim: 29
+use_wandb: false
+wandb_project: os-vla
+seed: 0
+dtype: bfloat16

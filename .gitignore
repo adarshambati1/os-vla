@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env
+.env
+.venv/
+venv/
+env/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Project artifacts
+data/raw/
+data/processed/
+wandb/
+checkpoints/
+runs/
+*.pt
+*.pth
+*.ckpt
+*.zarr
+*.hdf5
+*.h5
+
+# Notebook scratch
+.ipynb_checkpoints/

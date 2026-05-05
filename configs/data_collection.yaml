@@ -1,0 +1,29 @@
+# SimToolReal rollout collection. Run on Linux + NVIDIA + Isaac Gym.
+output_dir: data/raw
+policy_ckpt: pretrained_policy/model.pth
+policy_config: pretrained_policy/config.yaml
+num_envs: 64
+num_episodes_per_task: 200
+episode_length: 600         # ~10s @ 60Hz
+control_hz: 60
+with_fingertip_force_sensors: true   # required for OS wrench labels
+with_table_force_sensor: false
+record_camera: true
+camera:
+  width: 224
+  height: 224
+  # Match DexToolBench RGB-D viewpoint where possible — see
+  # docs/simtoolreal-notes.md (open question).
+tasks:
+  - hammer_swing_down
+  - hammer_swing_side
+  - marker_draw_smile
+  - marker_write_c
+  - eraser_wipe_smile
+  - eraser_wipe_c
+  - brush_sweep_forward
+  - brush_sweep_right
+  - spatula_serve_plate
+  - spatula_flip_over
+  - screwdriver_spin_vertical
+  - screwdriver_spin_horizontal
