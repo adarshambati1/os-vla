@@ -1,18 +1,20 @@
 import numpy as np
 
-from robosuite.controllers.parts.arm.osc import OperationalSpaceController
-from robosuite.utils.control_utils import (
-    opspace_matrices, nullspace_torques, orientation_error,
-)
+from robosuite.controllers.osc import OperationalSpaceController
+from robosuite.utils.control_utils import opspace_matrices, nullspace_torques, orientation_error
 
-class WrenchAugmentedOSC(OperationalSpaceController): # adding forces to controller
+class WrenchAugmentedOSC14(OperationalSpaceController):
 
     def init_hybrid(self, Kfp=0.5, Kfi=0.02, i_clamp=20.0):
         self._S = np.zeros(6)
         self._F_d = np.zeros(6)
         self._F_meas = np.zeros(6)
         self._I = np.zeros(6)
+        self._W_ff = np.zeros(6)
         self._Kfp, self._Kfi, self._i_clamp = Kfp, Kfi, i_clamp
+
+    def set_feedforward_wrench(self, wrench_6d):
+        self._W_ff = np.asarray(wrench_6d, float).reshape(6)
 
     def set_force_target(self, wrench_6d, axes=(2,)):
         self._F_d = np.asarray(wrench_6d, float).reshape(6)
@@ -29,6 +31,7 @@ class WrenchAugmentedOSC(OperationalSpaceController): # adding forces to control
     def reset_hybrid(self):
         self._S = np.zeros(6); self._F_d = np.zeros(6)
         self._F_meas = np.zeros(6); self._I = np.zeros(6)
+        self._W_ff = np.zeros(6)
 
     def run_controller(self):
         if not hasattr(self, "_S"):
@@ -36,21 +39,15 @@ class WrenchAugmentedOSC(OperationalSpaceController): # adding forces to control
 
         self.update()
 
-        if self.input_ref_frame == "base":
-            desired_world_pos = self.origin_pos + np.dot(self.origin_ori, self.goal_pos)
-            desired_world_ori = np.dot(self.origin_ori, self.goal_ori)
-        else:
-            desired_world_pos = self.goal_pos
-            desired_world_ori = self.goal_ori
-        ori_error = orientation_error(desired_world_ori, self.ref_ori_mat)
+        desired_pos = np.array(self.goal_pos)
+        desired_ori = np.array(self.goal_ori)
+        ori_error = orientation_error(desired_ori, self.ee_ori_mat)
 
-        position_error = desired_world_pos - self.ref_pos
-        base_pos_vel = np.array(self.sim.data.get_site_xvelp(f"{self.naming_prefix}{self.part_name}_center"))
-        vel_pos_error = -(self.ref_pos_vel - base_pos_vel)
+        position_error = desired_pos - self.ee_pos
+        vel_pos_error = -self.ee_pos_vel
         desired_force = np.multiply(position_error, self.kp[0:3]) + np.multiply(vel_pos_error, self.kd[0:3])
 
-        base_ori_vel = np.array(self.sim.data.get_site_xvelr(f"{self.naming_prefix}{self.part_name}_center"))
-        vel_ori_error = -(self.ref_ori_vel - base_ori_vel)
+        vel_ori_error = -self.ee_ori_vel
         desired_torque = np.multiply(ori_error, self.kp[3:6]) + np.multiply(vel_ori_error, self.kd[3:6])
 
         lambda_full, lambda_pos, lambda_ori, nullspace_matrix = opspace_matrices(
@@ -68,6 +65,8 @@ class WrenchAugmentedOSC(OperationalSpaceController): # adding forces to control
             self._I = np.clip(self._I + self._Kfi * err, -self._i_clamp, self._i_clamp)
             F_force = self._F_d + self._Kfp * err + self._I
             wrench = (1.0 - self._S) * W_m + self._S * F_force
+
+        wrench = wrench + self._W_ff
 
         self.torques = np.dot(self.J_full.T, wrench) + self.torque_compensation
         self.torques += nullspace_torques(

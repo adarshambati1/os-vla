@@ -12,7 +12,6 @@ data/*
 !data/.gitkeep
 checkpoints/*
 !checkpoints/.gitkeep
-figures/
 *.npz
 *.pt
 *.hdf5
