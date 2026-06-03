@@ -1,0 +1,13 @@
+{
+  "opspace": {
+    "coverage_mean": 0.444,
+    "coverage_std": 0.17005097275032957,
+    "success_rate": 0.0
+  },
+  "joint": {
+    "coverage_mean": 0.0003333333333333333,
+    "coverage_std": 0.0017950549357115017,
+    "success_rate": 0.0
+  },
+  "episodes": 30
+}

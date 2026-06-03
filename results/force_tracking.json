@@ -1,0 +1,10 @@
+{
+  "mode": "scripted",
+  "force": "on",
+  "coverage_mean": 0.17,
+  "coverage_std": 0.21536016344718908,
+  "success_rate": 0.0,
+  "mean_force_err": 7.641954539149245,
+  "mean_target": 40.0,
+  "mean_measured_fz": 38.564195263581546
+}

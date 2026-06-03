@@ -1,0 +1,10 @@
+{
+  "mode": "mlp",
+  "force": "on",
+  "coverage_mean": 0.49799999999999994,
+  "coverage_std": 0.2609137788619068,
+  "success_rate": 0.05,
+  "mean_force_err": 43.08010979596497,
+  "mean_target": 39.37774435437415,
+  "mean_measured_fz": 71.9150973293569
+}

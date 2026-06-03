@@ -1,40 +1,18 @@
-# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.egg-info/
-.eggs/
-build/
-dist/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Env
-.env
+*.py[cod]
+.ipynb_checkpoints/
 .venv/
 venv/
 env/
-
-# Editor
-.vscode/
-.idea/
-*.swp
+*.egg-info/
 .DS_Store
+.pytest_cache/
 
-# Project artifacts
-data/raw/
-data/processed/
-wandb/
-checkpoints/
-runs/
+data/*
+!data/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+figures/
+*.npz
 *.pt
-*.pth
-*.ckpt
-*.zarr
 *.hdf5
-*.h5
-
-# Notebook scratch
-.ipynb_checkpoints/

@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opspace-vla"
+version = "0.1"
+
+[tool.setuptools.packages.find]
+include = ["opspace_vla*"]

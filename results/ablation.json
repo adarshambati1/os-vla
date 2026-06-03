@@ -1,0 +1,17 @@
+{
+  "pose only (6)": {
+    "coverage_mean": 0.44266666666666665,
+    "coverage_std": 0.16103691778250379,
+    "success_rate": 0.0
+  },
+  "+wrench (12)": {
+    "coverage_mean": 0.43833333333333335,
+    "coverage_std": 0.15722771878888137,
+    "success_rate": 0.0
+  },
+  "full (18)": {
+    "coverage_mean": 0.44,
+    "coverage_std": 0.16027060449959835,
+    "success_rate": 0.0
+  }
+}
