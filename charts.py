@@ -25,14 +25,15 @@ def chart_closedloop():
     labels = ["op-space", "joint"]
     cov = [d["opspace"]["coverage_mean"], d["joint"]["coverage_mean"]]
     err = [d["opspace"]["coverage_std"], d["joint"]["coverage_std"]]
-    suc = [d["opspace"]["success_rate"], d["joint"]["success_rate"]]
-    f, ax = plt.subplots(1, 2, figsize=(8, 3.2))
-    ax[0].bar(labels, cov, yerr=err, capsize=6, color=["#2a7", "#a44"])
-    ax[0].set_ylabel("coverage"); ax[0].set_title("coverage")
-    ax[1].bar(labels, suc, color=["#2a7", "#a44"])
-    ax[1].set_ylabel("success"); ax[1].set_title("success")
-    f.suptitle("op-space vs joint")
-    f.tight_layout(); f.savefig(os.path.join(fig, "closedloop.png"), dpi=140)
+    f, ax = plt.subplots(figsize=(4.2, 3.6))
+    bars = ax.bar(labels, cov, yerr=err, capsize=8, color=["#2a7", "#a44"])
+    ax.set_ylabel("wiping coverage")
+    ax.set_title("op-space vs joint")
+    ax.set_ylim(0, max(c + e for c, e in zip(cov, err)) + 0.12)
+    for b, c in zip(bars, cov):
+        ax.text(b.get_x() + b.get_width() / 2, b.get_height() + 0.015,
+                f"{c:.2f}", ha="center", va="bottom", fontsize=11)
+    f.tight_layout(); f.savefig(os.path.join(fig, "closedloop.png"), dpi=150)
     print("wrote", os.path.join(fig, "closedloop.png"))
 
 
@@ -60,11 +61,16 @@ def chart_force():
     meas = d.get("mean_measured_fz", d.get("measured_fz_mean"))
     if tgt is None or meas is None:
         return
-    plt.figure(figsize=(4.5, 3.2))
-    plt.bar(["target", "measured"], [tgt, meas], color=["#888", "#37a"])
-    plt.title("force tracking")
-    plt.ylabel("force (N)"); plt.tight_layout()
-    plt.savefig(os.path.join(fig, "force_tracking.png"), dpi=140)
+    f, ax = plt.subplots(figsize=(4.2, 3.6))
+    bars = ax.bar(["commanded", "measured"], [tgt, meas], color=["#888", "#37a"])
+    ax.set_ylabel("normal force (N)")
+    ax.set_title("force tracking (scripted)")
+    ax.set_ylim(0, max(tgt, meas) * 1.25)
+    for b, v in zip(bars, [tgt, meas]):
+        ax.text(b.get_x() + b.get_width() / 2, b.get_height() + max(tgt, meas) * 0.02,
+                f"{v:.1f}", ha="center", va="bottom", fontsize=11)
+    f.tight_layout()
+    f.savefig(os.path.join(fig, "force_tracking.png"), dpi=150)
     print("wrote", os.path.join(fig, "force_tracking.png"))
 
 
