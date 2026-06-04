@@ -50,21 +50,22 @@ plt.close()
 def heatmap(metric, cmap, title, fname, fmt="{:.2f}"):
     M = np.array([[res[m]["per_task"][t][metric] if res[m]["per_task"][t][metric] is not None else np.nan
                    for t in tasks] for m in METHODS])
-    fig, ax = plt.subplots(figsize=(13, 4.2))
+    fig, ax = plt.subplots(figsize=(14, 5.2))
     im = ax.imshow(M, cmap=cmap, aspect="auto", vmin=0, vmax=(1 if metric == "success_rate" else None))
     ax.set_xticks(range(len(tasks)))
-    ax.set_xticklabels(labels, rotation=40, ha="right", fontsize=8)
+    ax.set_xticklabels(labels, rotation=40, ha="right", fontsize=15)
     ax.set_yticks(range(len(METHODS)))
-    ax.set_yticklabels([LABEL[m].replace("\n", " ") for m in METHODS])
+    ax.set_yticklabels([LABEL[m].replace("\n", " ") for m in METHODS], fontsize=16)
     for i in range(len(METHODS)):
         for j in range(len(tasks)):
             v = M[i, j]
             if not np.isnan(v):
-                ax.text(j, i, fmt.format(v), ha="center", va="center", fontsize=8)
-    ax.set_title(title)
-    fig.colorbar(im, ax=ax, fraction=0.025)
+                ax.text(j, i, fmt.format(v), ha="center", va="center", fontsize=15, fontweight="bold")
+    ax.set_title(title, fontsize=19)
+    cb = fig.colorbar(im, ax=ax, fraction=0.025)
+    cb.ax.tick_params(labelsize=13)
     plt.tight_layout()
-    plt.savefig(os.path.join(FIGDIR, fname), dpi=150)
+    plt.savefig(os.path.join(FIGDIR, fname), dpi=200)
     plt.close()
 
 

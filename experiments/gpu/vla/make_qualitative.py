@@ -30,14 +30,14 @@ def frame(task, method):
 
 
 for task, nice in TASKS:
-    fig, axes = plt.subplots(1, 4, figsize=(12, 3.4))
+    fig, axes = plt.subplots(1, 4, figsize=(12, 3.6))
     for ax, m in zip(axes, METHODS):
         p = frame(task, m)
         if p:
             ax.imshow(mpimg.imread(p))
-        ax.set_title(TITLE[m], fontsize=10)
+        ax.set_title(TITLE[m], fontsize=17, fontweight="bold")
         ax.axis("off")
-    fig.suptitle(f"final rollout frame: {nice}", fontsize=12)
+    fig.suptitle(f"final rollout frame: {nice}", fontsize=20)
     plt.tight_layout()
     plt.savefig(os.path.join(FIGDIR, f"qual_{task}.png"), dpi=130)
     plt.close()
